@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>IndoRebate - Generator Balasan Validasi</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+    @keyframes slideUp {
+      from { transform: translate(-50%, 100%); opacity: 0; }
+      to { transform: translate(-50%, 0); opacity: 1; }
+    }
+    .toast-animate {
+      animation: slideUp 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+  </style>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen pb-12 antialiased selection:bg-emerald-500 selection:text-white">
+
+  <div class="max-w-md mx-auto px-4 py-5 flex flex-col gap-4">
+
+    <!-- Header -->
+    <header class="flex items-center justify-between bg-slate-800/80 backdrop-blur border border-slate-700/60 p-4 rounded-2xl shadow-xl">
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-400 flex items-center justify-center text-white font-black text-xl shadow-lg shadow-emerald-900/40">
+          IR
+        </div>
+        <div>
+          <h1 class="text-base font-bold tracking-tight text-white flex items-center gap-1.5">
+            IndoRebate
+            <span class="text-[10px] bg-emerald-500/20 text-emerald-400 font-semibold px-2 py-0.5 rounded-full border border-emerald-500/30">Auto Reply</span>
+          </h1>
+          <p class="text-xs text-slate-400">Generator Balasan Validasi Akun</p>
+        </div>
+      </div>
+      <button id="btn-info" onclick="toggleInfoModal()" class="w-8 h-8 rounded-full bg-slate-700/60 flex items-center justify-center text-slate-300 hover:text-white hover:bg-slate-700 transition">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+      </button>
+    </header>
+
+    <!-- Form Input -->
+    <section class="bg-slate-800/90 border border-slate-700/80 rounded-2xl p-5 shadow-xl space-y-4">
+      
+      <!-- Pilih Broker -->
+      <div>
+        <label for="broker-select" class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2 flex justify-between items-center">
+          <span>Pilih Broker</span>
+          <span id="xm-badge" class="hidden text-[10px] bg-amber-500/20 text-amber-400 font-medium px-2 py-0.5 rounded border border-amber-500/30">
+            ⚡ Mode Khusus (myWallet)
+          </span>
+        </label>
+        <div class="relative">
+          <select id="broker-select" onchange="handleInputChange()" class="w-full bg-slate-900 border border-slate-700 text-white rounded-xl px-4 py-3.5 text-sm font-medium focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 focus:outline-none transition appearance-none cursor-pointer">
+            <option value="Headway">Headway</option>
+            <option value="Exness">Exness</option>
+            <option value="HFMarkets">HFMarkets</option>
+            <option value="Tickmill">Tickmill</option>
+            <option value="Justmarkets">Justmarkets</option>
+            <option value="Roboforex">Roboforex</option>
+            <option value="XM">XM (Khusus myWallet)</option>
+          </select>
+          <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-slate-400">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+            </svg>
+          </div>
+        </div>
+
+        <!-- Tombol Cepat Pilihan Broker (Pills) -->
+        <div class="flex flex-wrap gap-1.5 mt-2.5">
+          <button type="button" onclick="setBroker('Headway')" class="broker-pill px-2.5 py-1 text-xs rounded-lg bg-slate-700/60 hover:bg-slate-700 text-slate-300 border border-slate-600/40 transition active:scale-95">Headway</button>
+          <button type="button" onclick="setBroker('Exness')" class="broker-pill px-2.5 py-1 text-xs rounded-lg bg-slate-700/60 hover:bg-slate-700 text-slate-300 border border-slate-600/40 transition active:scale-95">Exness</button>
+          <button type="button" onclick="setBroker('HFMarkets')" class="broker-pill px-2.5 py-1 text-xs rounded-lg bg-slate-700/60 hover:bg-slate-700 text-slate-300 border border-slate-600/40 transition active:scale-95">HFMarkets</button>
+          <button type="button" onclick="setBroker('Tickmill')" class="broker-pill px-2.5 py-1 text-xs rounded-lg bg-slate-700/60 hover:bg-slate-700 text-slate-300 border border-slate-600/40 transition active:scale-95">Tickmill</button>
+          <button type="button" onclick="setBroker('Justmarkets')" class="broker-pill px-2.5 py-1 text-xs rounded-lg bg-slate-700/60 hover:bg-slate-700 text-slate-300 border border-slate-600/40 transition active:scale-95">Justmarkets</button>
+          <button type="button" onclick="setBroker('Roboforex')" class="broker-pill px-2.5 py-1 text-xs rounded-lg bg-slate-700/60 hover:bg-slate-700 text-slate-300 border border-slate-600/40 transition active:scale-95">Roboforex</button>
+          <button type="button" onclick="setBroker('XM')" class="broker-pill px-2.5 py-1 text-xs rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 transition active:scale-95 font-semibold">XM ★</button>
+        </div>
+      </div>
+
+      <!-- Input No Akun Trading -->
+      <div>
+        <label for="account-input" class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">
+          Nomor Akun Trading
+        </label>
+        <div class="relative">
+          <input 
+            type="text" 
+            id="account-input" 
+            placeholder="Contoh: 12048593" 
+            inputmode="numeric" 
+            oninput="handleInputChange()"
+            class="w-full bg-slate-900 border border-slate-700 text-white rounded-xl pl-4 pr-11 py-3.5 text-base font-semibold tracking-wide placeholder-slate-500 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 focus:outline-none transition"
+          >
+          <button 
+            type="button" 
+            id="btn-clear-input" 
+            onclick="clearAccountInput()" 
+            class="hidden absolute inset-y-0 right-0 flex items-center pr-3.5 text-slate-400 hover:text-white"
+          >
+            <svg class="w-5 h-5 bg-slate-800 rounded-full p-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- Area Pratinjau & Aksi -->
+    <section class="bg-slate-800/90 border border-slate-700/80 rounded-2xl p-5 shadow-xl space-y-3">
+      <div class="flex items-center justify-between">
+        <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
+          <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+          </svg>
+          Pratinjau Balasan
+        </span>
+        <span id="char-count" class="text-[11px] text-slate-500 font-mono">0 karakter</span>
+      </div>
+
+      <div class="relative group">
+        <textarea 
+          id="preview-text" 
+          rows="10" 
+          readonly 
+          class="w-full bg-slate-950/70 border border-slate-700/70 text-slate-200 rounded-xl p-3.5 text-xs sm:text-sm font-mono leading-relaxed resize-none focus:outline-none cursor-text select-all"
+        ></textarea>
+      </div>
+
+      <div class="grid grid-cols-1 gap-2 pt-1">
+        <!-- Tombol Salin -->
+        <button 
+          id="btn-copy" 
+          onclick="copyToClipboard()" 
+          class="w-full bg-emerald-500 hover:bg-emerald-600 active:scale-[0.98] text-slate-950 font-bold py-3.5 px-4 rounded-xl shadow-lg shadow-emerald-500/20 flex items-center justify-center gap-2 transition duration-150"
+        >
+          <svg id="copy-icon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path>
+          </svg>
+          <span id="copy-text">Salin Teks Balasan</span>
+        </button>
+
+        <div class="grid grid-cols-2 gap-2">
+          <!-- Tombol Kirim WhatsApp -->
+          <button 
+            onclick="shareToWhatsApp()" 
+            class="bg-emerald-950/60 hover:bg-emerald-900/60 text-emerald-400 border border-emerald-800/50 active:scale-[0.98] font-semibold py-2.5 px-3 rounded-xl flex items-center justify-center gap-1.5 text-xs transition"
+          >
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
+            </svg>
+            Kirim WhatsApp
+          </button>
+
+          <!-- Tombol Reset -->
+          <button 
+            onclick="resetForm()" 
+            class="bg-slate-700/50 hover:bg-slate-700 text-slate-300 border border-slate-600/40 active:scale-[0.98] font-semibold py-2.5 px-3 rounded-xl flex items-center justify-center gap-1.5 text-xs transition"
+          >
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+            </svg>
+            Reset Form
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Riwayat -->
+    <section class="bg-slate-800/50 border border-slate-700/40 rounded-2xl p-4 shadow-lg">
+      <div class="flex items-center justify-between mb-3">
+        <h2 class="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
+          <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+          </svg>
+          Riwayat Disalin
+        </h2>
+        <button onclick="clearHistory()" id="btn-clear-history" class="text-[11px] text-slate-500 hover:text-rose-400 transition hidden">
+          Hapus
+        </button>
+      </div>
+      <div id="history-list" class="space-y-2">
+        <p id="empty-history" class="text-xs text-slate-500 italic py-1">Belum ada balasan yang disalin.</p>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- Toast -->
+  <div id="toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 pointer-events-none hidden">
+    <div class="bg-emerald-500 text-slate-950 font-bold px-4 py-2.5 rounded-full shadow-2xl flex items-center gap-2 text-xs sm:text-sm toast-animate">
+      <svg class="w-4 h-4 text-slate-950" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path>
+      </svg>
+      <span id="toast-message">Teks berhasil disalin!</span>
+    </div>
+  </div>
+
+  <!-- Modal Bantuan -->
+  <div id="info-modal" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+    <div class="bg-slate-800 border border-slate-700 w-full max-w-sm rounded-2xl p-5 shadow-2xl space-y-4">
+      <div class="flex justify-between items-center pb-2 border-b border-slate-700">
+        <h3 class="font-bold text-white text-base">Petunjuk Penggunaan</h3>
+        <button onclick="toggleInfoModal()" class="text-slate-400 hover:text-white">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+      <div class="text-xs text-slate-300 space-y-2.5 leading-relaxed">
+        <p>1. <strong>Pilih Broker</strong> dari daftar atau tombol cepat.</p>
+        <p>2. <strong>Masukkan No Akun</strong> trading nasabah.</p>
+        <p>3. Format balasan otomatis menyesuaikan (khusus <strong>XM</strong> ke <em>myWallet</em>).</p>
+        <p>4. Klik <strong>"Salin Teks Balasan"</strong>.</p>
+      </div>
+      <button onclick="toggleInfoModal()" class="w-full bg-slate-700 hover:bg-slate-600 text-white font-semibold py-2.5 rounded-xl text-xs transition">
+        Tutup
+      </button>
+    </div>
+  </div>
+
+  <script>
+    let historyData = [];
+
+    const brokerSelect = document.getElementById('broker-select');
+    const accountInput = document.getElementById('account-input');
+    const previewText = document.getElementById('preview-text');
+    const charCount = document.getElementById('char-count');
+    const xmBadge = document.getElementById('xm-badge');
+    const btnClearInput = document.getElementById('btn-clear-input');
+    const toast = document.getElementById('toast');
+    const toastMessage = document.getElementById('toast-message');
+    const historyList = document.getElementById('history-list');
+    const emptyHistory = document.getElementById('empty-history');
+    const btnClearHistory = document.getElementById('btn-clear-history');
+    const infoModal = document.getElementById('info-modal');
+
+    function generateMessage(broker, account) {
+      const accNum = (account && account.trim() !== "") ? account.trim() : "xxxxxxxx";
+      const brokerName = broker || "xxxxxxxx";
+      const isXM = (brokerName.toUpperCase() === "XM");
+      const targetTujuan = isXM ? "langsung ke myWallet secara otomatis." : "langsung ke akun trading secara otomatis.";
+
+      return `Validasi Rebate Sukses\n\nNo akun trading : ${accNum}\nBroker : ${brokerName}\n\nRebate  dibayarkan tiap 24 jam setelah penutupan order ${targetTujuan}\n\nHarap lakukan validasi di web indorebate setiap anda membuat akun trading baru.\n\nRebate dihitung setelah validasi disetujui/Sukses`;
+    }
+
+    function updatePreview() {
+      const broker = brokerSelect.value;
+      const account = accountInput.value;
+      
+      if (broker === 'XM') {
+        xmBadge.classList.remove('hidden');
+      } else {
+        xmBadge.classList.add('hidden');
+      }
+
+      if (account.length > 0) {
+        btnClearInput.classList.remove('hidden');
+      } else {
+        btnClearInput.classList.add('hidden');
+      }
+
+      const message = generateMessage(broker, account);
+      previewText.value = message;
+      charCount.textContent = `${message.length} karakter`;
+    }
+
+    function handleInputChange() {
+      updatePreview();
+    }
+
+    function setBroker(brokerName) {
+      brokerSelect.value = brokerName;
+      updatePreview();
+    }
+
+    function clearAccountInput() {
+      accountInput.value = '';
+      accountInput.focus();
+      updatePreview();
+    }
+
+    function resetForm() {
+      brokerSelect.selectedIndex = 0;
+      accountInput.value = '';
+      updatePreview();
+      showToast('Form telah direset');
+    }
+
+    function copyToClipboard() {
+      const text = previewText.value;
+      if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(text).then(() => {
+          onCopySuccess(text);
+        }).catch(() => {
+          fallbackCopy(text);
+        });
+      } else {
+        fallbackCopy(text);
+      }
+    }
+
+    function fallbackCopy(text) {
+      try {
+        previewText.select();
+        previewText.setSelectionRange(0, 99999);
+        const successful = document.execCommand('copy');
+        if (successful) {
+          onCopySuccess(text);
+        } else {
+          showToast('Gagal menyalin otomatis');
+        }
+      } catch (err) {
+        showToast('Gagal menyalin teks');
+      }
+    }
+
+    function onCopySuccess(text) {
+      const copyBtn = document.getElementById('btn-copy');
+      const copyText = document.getElementById('copy-text');
+      copyBtn.classList.replace('bg-emerald-500', 'bg-emerald-400');
+      copyText.textContent = "Tersalin ke Clipboard!";
+      
+      setTimeout(() => {
+        copyBtn.classList.replace('bg-emerald-400', 'bg-emerald-500');
+        copyText.textContent = "Salin Teks Balasan";
+      }, 1500);
+
+      showToast('✅ Teks balasan berhasil disalin!');
+      addToHistory(brokerSelect.value, accountInput.value || "xxxxxxxx", text);
+    }
+
+    function shareToWhatsApp() {
+      const text = previewText.value;
+      const url = `https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`;
+      window.open(url, '_blank');
+    }
+
+    let toastTimer = null;
+    function showToast(msg) {
+      toastMessage.textContent = msg;
+      toast.classList.remove('hidden');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => {
+        toast.classList.add('hidden');
+      }, 2500);
+    }
+
+    function addToHistory(broker, account, fullText) {
+      const timestamp = new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+      if (historyData.length > 0 && historyData[0].account === account && historyData[0].broker === broker) {
+        return;
+      }
+
+      historyData.unshift({ broker, account, fullText, time: timestamp });
+      if (historyData.length > 5) historyData.pop();
+      renderHistory();
+    }
+
+    function renderHistory() {
+      if (historyData.length === 0) {
+        emptyHistory.classList.remove('hidden');
+        btnClearHistory.classList.add('hidden');
+        historyList.innerHTML = '<p id="empty-history" class="text-xs text-slate-500 italic py-1">Belum ada balasan yang disalin.</p>';
+        return;
+      }
+
+      emptyHistory.classList.add('hidden');
+      btnClearHistory.classList.remove('hidden');
+      historyList.innerHTML = '';
+
+      historyData.forEach((item, index) => {
+        const div = document.createElement('div');
+        div.className = "flex items-center justify-between bg-slate-900/80 border border-slate-700/60 px-3 py-2 rounded-xl text-xs";
+        div.innerHTML = `
+          <div class="flex items-center gap-2 overflow-hidden">
+            <span class="font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">${item.broker}</span>
+            <span class="font-mono text-slate-200 truncate">${item.account}</span>
+            <span class="text-[10px] text-slate-500">${item.time}</span>
+          </div>
+          <button onclick="copyHistoryItem(${index})" class="text-xs text-slate-300 hover:text-emerald-400 font-medium px-2 py-1 rounded bg-slate-800 border border-slate-700 active:scale-95 transition">
+            Salin
+          </button>
+        `;
+        historyList.appendChild(div);
+      });
+    }
+
+    function copyHistoryItem(index) {
+      const item = historyData[index];
+      if (item) {
+        setBroker(item.broker);
+        accountInput.value = item.account === "xxxxxxxx" ? "" : item.account;
+        updatePreview();
+        copyToClipboard();
+      }
+    }
+
+    function clearHistory() {
+      historyData = [];
+      renderHistory();
+      showToast('Riwayat dibersihkan');
+    }
+
+    function toggleInfoModal() {
+      infoModal.classList.toggle('hidden');
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      updatePreview();
+    });
+  </script>
+</body>
+</html>
