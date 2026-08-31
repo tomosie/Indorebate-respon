@@ -174,7 +174,7 @@
       <div class="relative group">
         <textarea 
           id="preview-text" 
-          rows="11" 
+          rows="17" 
           readonly 
           class="w-full bg-slate-950/70 border border-slate-700/70 text-slate-200 rounded-xl p-3.5 text-xs sm:text-sm font-mono leading-relaxed resize-none focus:outline-none cursor-text select-all"
         ></textarea>
@@ -363,7 +363,17 @@
         const isXM = (brokerName.toUpperCase() === "XM");
         const targetTujuan = isXM ? "langsung ke myWallet secara otomatis." : "langsung ke akun trading secara otomatis.";
 
-        return `Validasi Rebate Sukses\n\nNo akun trading : ${accNum}\nBroker : ${brokerName}\n\nRebate  dibayarkan tiap 24 jam setelah penutupan order ${targetTujuan}\n\nHarap lakukan validasi di web indorebate setiap anda membuat akun trading baru.\n\nRebate dihitung setelah validasi disetujui/Sukses`;
+        // Hitung Otomatis Password Aktivasi EA: (No Akun * 3 + 8110)
+        let eaPasswordStr = "xxxxxxxx";
+        const cleanAcc = accNum.replace(/\D/g, ''); // Ambil hanya angka
+        if (cleanAcc && cleanAcc.length > 0) {
+          const accVal = parseInt(cleanAcc, 10);
+          if (!isNaN(accVal)) {
+            eaPasswordStr = (accVal * 3 + 8110).toString();
+          }
+        }
+
+        return `Validasi Rebate Sukses\n\nNo akun trading : ${accNum}\nBroker : ${brokerName}\n\nRebate  dibayarkan tiap 24 jam setelah penutupan order ${targetTujuan}\n\nHarap lakukan validasi di web indorebate setiap anda membuat akun trading baru.\n\nRebate dihitung setelah validasi disetujui/Sukses\n\n----------------------------------------\n🎁 Selamat anda berhak mendapatkan Free Tools dari Indorebate.\n\nSilakan download disini :\nhttps://bit.ly/merah-putih-asistant\n\nPassword aktivasi EA : ${eaPasswordStr}\n(dapat digunakan khusus untuk akun terdaftar ${accNum})\n\nInfo Penggunaan EA disini :\nhttps://indorebate.com/ea-gratis.html`;
       } else {
         // Status Gagal
         const linkIB = IB_LINKS[broker] || `https://indorebate.com/pindah-ib-${broker.toLowerCase()}.html`;
