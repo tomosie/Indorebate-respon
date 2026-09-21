@@ -109,6 +109,7 @@
             <option value="Justmarkets">Justmarkets</option>
             <option value="Roboforex">Roboforex</option>
             <option value="XM">XM</option>
+            <option value="TMGM">TMGM</option>
           </select>
           <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-slate-400">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -126,6 +127,7 @@
           <button type="button" onclick="setBroker('Justmarkets')" class="broker-pill px-2.5 py-1 text-xs rounded-lg bg-slate-700/60 hover:bg-slate-700 text-slate-300 border border-slate-600/40 transition active:scale-95">Justmarkets</button>
           <button type="button" onclick="setBroker('Roboforex')" class="broker-pill px-2.5 py-1 text-xs rounded-lg bg-slate-700/60 hover:bg-slate-700 text-slate-300 border border-slate-600/40 transition active:scale-95">Roboforex</button>
           <button type="button" onclick="setBroker('XM')" class="broker-pill px-2.5 py-1 text-xs rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 transition active:scale-95 font-semibold">XM ★</button>
+          <button type="button" onclick="setBroker('TMGM')" class="broker-pill px-2.5 py-1 text-xs rounded-lg bg-slate-700/60 hover:bg-slate-700 text-slate-300 border border-slate-600/40 transition active:scale-95">TMGM</button>
         </div>
       </div>
 
@@ -174,7 +176,7 @@
       <div class="relative group">
         <textarea 
           id="preview-text" 
-          rows="17" 
+          rows="18" 
           readonly 
           class="w-full bg-slate-950/70 border border-slate-700/70 text-slate-200 rounded-xl p-3.5 text-xs sm:text-sm font-mono leading-relaxed resize-none focus:outline-none cursor-text select-all"
         ></textarea>
@@ -290,7 +292,8 @@
       "Tickmill": "https://indorebate.com/pindah-ib-tickmill.html",
       "Justmarkets": "https://indorebate.com/pindah-ib-justmarkets.html",
       "Roboforex": "https://indorebate.com/pindah-ib-roboforex.html",
-      "XM": "https://indorebate.com/pindah-ib-xm.html"
+      "XM": "https://indorebate.com/pindah-ib-xm.html",
+      "TMGM": "https://indorebate.com/pindah-ib-tmgm.html"
     };
 
     // State Aplikasi
@@ -354,7 +357,7 @@
       updatePreview();
     }
 
-    // Generator Teks
+    // Generator Teks Balasan
     function generateMessage(broker, account, status) {
       const accNum = (account && account.trim() !== "") ? account.trim() : "xxxxxxxx";
       const brokerName = broker || "xxxxxxxx";
@@ -368,154 +371,142 @@
         const cleanAcc = accNum.replace(/\D/g, ''); // Ambil hanya angka
         if (cleanAcc && cleanAcc.length > 0) {
           const accVal = parseInt(cleanAcc, 10);
-          if (!isNaN(accVal)) {
-            eaPasswordStr = (accVal * 3 + 8110).toString();
-          }
+          eaPasswordStr = (accVal * 3 + 8110).toString();
         }
 
-        return `Validasi Rebate Sukses\n\nNo akun trading : ${accNum}\nBroker : ${brokerName}\n\nRebate  dibayarkan tiap 24 jam setelah penutupan order ${targetTujuan}\n\nHarap lakukan validasi di web indorebate setiap anda membuat akun trading baru.\n\nRebate dihitung setelah validasi disetujui/Sukses\n\n----------------------------------------\n🎁 Selamat anda berhak mendapatkan Free Tools dari Indorebate.\n\nEA Gratis :\nhttps://bit.ly/merah-putih-ea\n\nIndikator Gratis :\nhttps://bit.ly/signal-strenght\n\nPassword aktivasi EA : ${eaPasswordStr}\n(dapat digunakan khusus untuk akun terdaftar ${accNum})\n\nInfo EA dan Indikator gratis disini:\nhttps://indorebate.com/tools-gratis.html`;
+        return `Validasi Rebate Sukses
+
+No akun trading : ${accNum}
+Broker : ${brokerName}
+
+Rebate dibayarkan tiap 24 jam setelah penutupan order ${targetTujuan}
+
+Harap lakukan validasi di web indorebate setiap anda membuat akun trading baru.
+
+Rebate dihitung setelah validasi disetujui/Sukses
+
+----------------------------------------
+🎁 Selamat anda berhak mendapatkan Free Tools dari Indorebate.
+
+EA Gratis :
+https://bit.ly/merah-putih-ea
+
+Indikator Gratis :
+https://bit.ly/signal-strenght
+
+Password aktivasi EA : ${eaPasswordStr}
+(dapat digunakan khusus untuk akun terdaftar ${accNum})
+
+Info EA dan Indikator gratis disini:
+https://indorebate.com/tools-gratis.html`;
       } else {
-        // Status Gagal
-        const linkIB = IB_LINKS[broker] || `https://indorebate.com/pindah-ib-${broker.toLowerCase()}.html`;
-        
-        return `Validasi Gagal\n\nNo akun trading : ${accNum}\nBroker : ${brokerName}\n\nNo akun anda tidak bisa kami aktivasi rebate karena akun anda tidak berada di bawah jaringan kami.\n\nSilakan lakukan proses pindah IB / jaringan.\n\nUntuk broker ${brokerName} ikuti petunjuk di ${linkIB}\n\n----------------------------------------\n🎁 Free EA & Indikator khusus member Indorebate\nInfo lengkap : https://indorebate.com/tools-gratis.html`;
+        const linkIB = IB_LINKS[brokerName] || `https://indorebate.com/pindah-ib-${brokerName.toLowerCase()}.html`;
+
+        return `Validasi Gagal
+
+No akun trading : ${accNum}
+Broker : ${brokerName}
+
+No akun anda tidak bisa kami aktivasi rebate karena akun anda tidak berada di bawah jaringan kami.
+
+Silakan lakukan proses pindah IB / jaringan.
+
+Untuk broker ${brokerName} ikuti petunjuk di ${linkIB}
+
+----------------------------------------
+🎁 Free EA & Indikator khusus member Indorebate
+Info lengkap : https://indorebate.com/tools-gratis.html`;
       }
     }
 
-    // Update Pratinjau
-    function updatePreview() {
-      const broker = brokerSelect.value;
-      const account = accountInput.value;
-      
-      // Update badges
-      if (currentStatus === 'sukses') {
-        linkBadge.classList.add('hidden');
-        if (broker === 'XM') {
-          xmBadge.classList.remove('hidden');
-        } else {
-          xmBadge.classList.add('hidden');
-        }
-      } else {
-        xmBadge.classList.add('hidden');
-        linkBadge.classList.remove('hidden');
-      }
+    // Helper & Event Handlers
+    function setBroker(brokerName) {
+      brokerSelect.value = brokerName;
+      handleInputChange();
+    }
 
-      // Tombol Clear Input
-      if (account.length > 0) {
+    function handleInputChange() {
+      const val = accountInput.value;
+      if (val.length > 0) {
         btnClearInput.classList.remove('hidden');
       } else {
         btnClearInput.classList.add('hidden');
       }
-
-      const message = generateMessage(broker, account, currentStatus);
-      previewText.value = message;
-      charCount.textContent = `${message.length} karakter`;
-    }
-
-    function handleInputChange() {
-      updatePreview();
-    }
-
-    // Set broker dari Pill Buttons
-    function setBroker(brokerName) {
-      brokerSelect.value = brokerName;
       updatePreview();
     }
 
     function clearAccountInput() {
       accountInput.value = '';
+      btnClearInput.classList.add('hidden');
       accountInput.focus();
       updatePreview();
     }
 
-    function resetForm() {
-      brokerSelect.selectedIndex = 0;
-      accountInput.value = '';
-      setStatus('sukses');
-      showToast('Form telah direset');
-    }
-
-    // Salin ke Clipboard
-    function copyToClipboard() {
-      const text = previewText.value;
-      if (navigator.clipboard && window.isSecureContext) {
-        navigator.clipboard.writeText(text).then(() => {
-          onCopySuccess(text);
-        }).catch(() => {
-          fallbackCopy(text);
-        });
-      } else {
-        fallbackCopy(text);
-      }
-    }
-
-    function fallbackCopy(text) {
-      try {
-        previewText.select();
-        previewText.setSelectionRange(0, 99999);
-        const successful = document.execCommand('copy');
-        if (successful) {
-          onCopySuccess(text);
-        } else {
-          showToast('Gagal menyalin otomatis');
-        }
-      } catch (err) {
-        showToast('Gagal menyalin teks');
-      }
-    }
-
-    function onCopySuccess(text) {
-      const copyText = document.getElementById('copy-text');
-      const originalText = copyText.textContent;
-      copyText.textContent = "Tersalin ke Clipboard!";
+    function updatePreview() {
+      const broker = brokerSelect.value;
+      const account = accountInput.value;
       
-      setTimeout(() => {
-        copyText.textContent = originalText;
-      }, 1500);
+      // Update badge indikator
+      if (broker.toUpperCase() === "XM" && currentStatus === "sukses") {
+        xmBadge.classList.remove('hidden');
+      } else {
+        xmBadge.classList.add('hidden');
+      }
 
-      showToast(`✅ Balasan (${currentStatus.toUpperCase()}) berhasil disalin!`);
-      addToHistory(brokerSelect.value, accountInput.value || "xxxxxxxx", currentStatus, text);
+      if (currentStatus === "gagal") {
+        linkBadge.classList.remove('hidden');
+      } else {
+        linkBadge.classList.add('hidden');
+      }
+
+      const msg = generateMessage(broker, account, currentStatus);
+      previewText.value = msg;
+      charCount.textContent = `${msg.length} karakter`;
+    }
+
+    function copyToClipboard() {
+      const textToCopy = previewText.value;
+      if (!textToCopy) return;
+
+      // Gunakan execCommand untuk kompatibilitas iframe/mobile
+      const textArea = document.createElement("textarea");
+      textArea.value = textToCopy;
+      textArea.style.position = "fixed";
+      textArea.style.opacity = "0";
+      document.body.appendChild(textArea);
+      textArea.select();
+      
+      try {
+        document.execCommand("copy");
+        showToast("Teks berhasil disalin!");
+        addHistory(brokerSelect.value, accountInput.value, currentStatus, textToCopy);
+      } catch (err) {
+        showToast("Gagal menyalin teks");
+      }
+      document.body.removeChild(textArea);
     }
 
     function shareToWhatsApp() {
       const text = previewText.value;
-      const url = `https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`;
-      window.open(url, '_blank');
+      const encodedText = encodeURIComponent(text);
+      window.open(`https://api.whatsapp.com/send?text=${encodedText}`, '_blank');
+      addHistory(brokerSelect.value, accountInput.value, currentStatus, text);
     }
 
-    let toastTimer = null;
-    function showToast(msg) {
-      toastMessage.textContent = msg;
-      toast.classList.remove('hidden');
-      
-      clearTimeout(toastTimer);
-      toastTimer = setTimeout(() => {
-        toast.classList.add('hidden');
-      }, 2500);
+    function resetForm() {
+      accountInput.value = '';
+      brokerSelect.selectedIndex = 0;
+      btnClearInput.classList.add('hidden');
+      setStatus('sukses');
+      showToast("Form telah direset");
     }
 
-    // Riwayat Disalin
-    function addToHistory(broker, account, status, fullText) {
-      const timestamp = new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+    function addHistory(broker, account, status, fullText) {
+      const acc = account || "N/A";
+      const time = new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
       
-      if (historyData.length > 0 && 
-          historyData[0].account === account && 
-          historyData[0].broker === broker && 
-          historyData[0].status === status) {
-        return;
-      }
-
-      historyData.unshift({
-        broker,
-        account,
-        status,
-        fullText,
-        time: timestamp
-      });
-
-      if (historyData.length > 6) {
-        historyData.pop();
-      }
+      historyData.unshift({ broker, account: acc, status, fullText, time });
+      if (historyData.length > 5) historyData.pop(); // Maksimal 5 riwayat
 
       renderHistory();
     }
@@ -524,7 +515,8 @@
       if (historyData.length === 0) {
         emptyHistory.classList.remove('hidden');
         btnClearHistory.classList.add('hidden');
-        historyList.innerHTML = '<p id="empty-history" class="text-xs text-slate-500 italic py-1">Belum ada balasan yang disalin.</p>';
+        historyList.innerHTML = '';
+        historyList.appendChild(emptyHistory);
         return;
       }
 
@@ -533,54 +525,52 @@
       historyList.innerHTML = '';
 
       historyData.forEach((item, index) => {
-        const isSuccess = item.status === 'sukses';
-        const badgeColor = isSuccess 
-          ? 'text-emerald-400 bg-emerald-500/10 border-emerald-500/20' 
-          : 'text-rose-400 bg-rose-500/10 border-rose-500/20';
-
         const div = document.createElement('div');
-        div.className = "flex items-center justify-between bg-slate-900/80 border border-slate-700/60 px-3 py-2 rounded-xl text-xs";
+        div.className = "bg-slate-900/80 border border-slate-700/60 rounded-xl p-2.5 flex items-center justify-between text-xs";
         
+        const isSukses = item.status === 'sukses';
+        const badgeBg = isSukses ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30' : 'bg-rose-500/20 text-rose-400 border-rose-500/30';
+
         div.innerHTML = `
           <div class="flex items-center gap-2 overflow-hidden">
-            <span class="font-bold px-2 py-0.5 rounded border ${badgeColor}">
-              ${item.broker} (${isSuccess ? '✓' : '✕'})
-            </span>
-            <span class="font-mono text-slate-200 truncate">${item.account}</span>
-            <span class="text-[10px] text-slate-500">${item.time}</span>
+            <span class="text-[10px] px-1.5 py-0.5 rounded border font-semibold ${badgeBg}">${item.status.toUpperCase()}</span>
+            <span class="font-bold text-white">${item.broker}</span>
+            <span class="text-slate-400 font-mono text-[11px] truncate">#${item.account}</span>
           </div>
-          <button onclick="copyHistoryItem(${index})" class="text-xs text-slate-300 hover:text-emerald-400 font-medium px-2 py-1 rounded bg-slate-800 border border-slate-700 active:scale-95 transition">
-            Salin
-          </button>
+          <div class="flex items-center gap-2">
+            <span class="text-[10px] text-slate-500">${item.time}</span>
+            <button onclick="copyHistoryItem(${index})" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-300 p-1.5 rounded-lg border border-slate-700 transition" title="Salin Ulang">
+              📋
+            </button>
+          </div>
         `;
         historyList.appendChild(div);
       });
     }
 
     function copyHistoryItem(index) {
-      const item = historyData[index];
-      if (item) {
-        setBroker(item.broker);
-        setStatus(item.status);
-        accountInput.value = item.account === "xxxxxxxx" ? "" : item.account;
-        updatePreview();
+      if (historyData[index]) {
+        previewText.value = historyData[index].fullText;
         copyToClipboard();
       }
     }
 
-    function clearHistory() {
-      historyData = [];
-      renderHistory();
-      showToast('Riwayat telah dibersihkan');
+    function showToast(msg) {
+      toastMessage.textContent = msg;
+      toast.classList.remove('hidden');
+      setTimeout(() => {
+        toast.classList.add('hidden');
+      }, 2000);
     }
 
     function toggleInfoModal() {
       infoModal.classList.toggle('hidden');
     }
 
-    window.addEventListener('DOMContentLoaded', () => {
+    // Initial Load
+    window.onload = function() {
       updatePreview();
-    });
+    };
   </script>
 </body>
 </html>
