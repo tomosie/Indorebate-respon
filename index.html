@@ -357,14 +357,6 @@
         const isTickmill = (brokerName.toUpperCase() === "TICKMILL");
         const isTMGM = (brokerName.toUpperCase() === "TMGM");
 
-        // Hitung Otomatis Password Aktivasi EA: (No Akun * 3 + 8110)
-        let eaPasswordStr = "xxxxxxxx";
-        const cleanAcc = accNum.replace(/\D/g, ''); 
-        if (cleanAcc && cleanAcc.length > 0) {
-          const accVal = parseInt(cleanAcc, 10);
-          eaPasswordStr = (accVal * 3 + 8110).toString();
-        }
-
         // Format khusus untuk TMGM Validasi Sukses
         if (isTMGM) {
           return `Validasi Rebate Sukses
@@ -385,11 +377,18 @@ Rebate dihitung setelah validasi disetujui/Sukses
 ----------------------------------------
 🎁 Selamat anda berhak mendapatkan Free Tools dari Indorebate.
 
-Password aktivasi EA : ${eaPasswordStr}
-(dapat digunakan khusus untuk akun terdaftar ${accNum})
-
 Info EA dan Indikator gratis disini:
-https://indorebate.com/tools-gratis.html`;
+https://indorebate.com/tools-gratis.html
+
+Jika anda sudah membuat akun untuk trading silakan hubungi wa admin indorebate untuk memperoleh password aktivasi EA & Indikator gratis`;
+        }
+
+        // Hitung Otomatis Password Aktivasi EA untuk broker lainnya: (No Akun * 3 + 8110)
+        let eaPasswordStr = "xxxxxxxx";
+        const cleanAcc = accNum.replace(/\D/g, ''); 
+        if (cleanAcc && cleanAcc.length > 0) {
+          const accVal = parseInt(cleanAcc, 10);
+          eaPasswordStr = (accVal * 3 + 8110).toString();
         }
 
         let paymentText = "tiap 24 jam setelah penutupan order langsung ke akun trading secara otomatis.";
