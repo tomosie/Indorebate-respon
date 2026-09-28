@@ -10,6 +10,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
   <style>
     body {
       font-family: 'Inter', sans-serif;
@@ -61,7 +62,6 @@
           Status Hasil Validasi
         </label>
         <div class="grid grid-cols-2 p-1 bg-slate-900 rounded-xl border border-slate-700">
-          <!-- Tombol Sukses -->
           <button 
             type="button" 
             id="tab-success" 
@@ -74,7 +74,6 @@
             Validasi Sukses
           </button>
           
-          <!-- Tombol Gagal -->
           <button 
             type="button" 
             id="tab-failed" 
@@ -176,7 +175,7 @@
       <div class="relative group">
         <textarea 
           id="preview-text" 
-          rows="18" 
+          rows="16" 
           readonly 
           class="w-full bg-slate-950/70 border border-slate-700/70 text-slate-200 rounded-xl p-3.5 text-xs sm:text-sm font-mono leading-relaxed resize-none focus:outline-none cursor-text select-all"
         ></textarea>
@@ -184,7 +183,6 @@
 
       <!-- Action Buttons -->
       <div class="grid grid-cols-1 gap-2 pt-1">
-        <!-- Tombol Salin Utama -->
         <button 
           id="btn-copy" 
           onclick="copyToClipboard()" 
@@ -197,7 +195,6 @@
         </button>
 
         <div class="grid grid-cols-2 gap-2">
-          <!-- Tombol Kirim WhatsApp -->
           <button 
             onclick="shareToWhatsApp()" 
             class="bg-emerald-950/60 hover:bg-emerald-900/60 text-emerald-400 border border-emerald-800/50 active:scale-[0.98] font-semibold py-2.5 px-3 rounded-xl flex items-center justify-center gap-1.5 text-xs transition"
@@ -208,7 +205,6 @@
             Kirim WhatsApp
           </button>
 
-          <!-- Tombol Reset Form -->
           <button 
             onclick="resetForm()" 
             class="bg-slate-700/50 hover:bg-slate-700 text-slate-300 border border-slate-600/40 active:scale-[0.98] font-semibold py-2.5 px-3 rounded-xl flex items-center justify-center gap-1.5 text-xs transition"
@@ -297,7 +293,7 @@
     };
 
     // State Aplikasi
-    let currentStatus = 'sukses'; // 'sukses' | 'gagal'
+    let currentStatus = 'sukses'; 
     let historyData = [];
 
     // DOM Elements
@@ -322,34 +318,27 @@
     const btnClearHistory = document.getElementById('btn-clear-history');
     const infoModal = document.getElementById('info-modal');
 
-    // Mengganti Status (Sukses / Gagal)
     function setStatus(status) {
       currentStatus = status;
 
       if (status === 'sukses') {
-        // Tab styling
         tabSuccess.className = "flex items-center justify-center gap-1.5 py-2.5 rounded-lg text-xs font-bold transition duration-200 bg-emerald-500 text-slate-950 shadow-md";
         tabFailed.className = "flex items-center justify-center gap-1.5 py-2.5 rounded-lg text-xs font-bold transition duration-200 text-slate-400 hover:text-white";
         
-        // Header badge & theme
         badgeModeText.textContent = "Validasi Sukses";
         badgeModeText.className = "text-[10px] bg-emerald-500/20 text-emerald-400 font-semibold px-2 py-0.5 rounded-full border border-emerald-500/30 transition-colors";
         brandLogo.className = "w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-400 flex items-center justify-center text-white font-black text-xl shadow-lg shadow-emerald-900/40 transition-colors";
         
-        // Copy Button styling
         btnCopy.className = "w-full bg-emerald-500 hover:bg-emerald-600 active:scale-[0.98] text-slate-950 font-bold py-3.5 px-4 rounded-xl shadow-lg shadow-emerald-500/20 flex items-center justify-center gap-2 transition duration-150";
         previewIcon.className = "w-4 h-4 text-emerald-400";
       } else {
-        // Tab styling
         tabFailed.className = "flex items-center justify-center gap-1.5 py-2.5 rounded-lg text-xs font-bold transition duration-200 bg-rose-500 text-white shadow-md";
         tabSuccess.className = "flex items-center justify-center gap-1.5 py-2.5 rounded-lg text-xs font-bold transition duration-200 text-slate-400 hover:text-white";
         
-        // Header badge & theme
         badgeModeText.textContent = "Validasi Gagal";
         badgeModeText.className = "text-[10px] bg-rose-500/20 text-rose-400 font-semibold px-2 py-0.5 rounded-full border border-rose-500/30 transition-colors";
         brandLogo.className = "w-10 h-10 rounded-xl bg-gradient-to-tr from-rose-600 to-orange-500 flex items-center justify-center text-white font-black text-xl shadow-lg shadow-rose-900/40 transition-colors";
         
-        // Copy Button styling
         btnCopy.className = "w-full bg-rose-500 hover:bg-rose-600 active:scale-[0.98] text-white font-bold py-3.5 px-4 rounded-xl shadow-lg shadow-rose-500/20 flex items-center justify-center gap-2 transition duration-150";
         previewIcon.className = "w-4 h-4 text-rose-400";
       }
@@ -357,7 +346,6 @@
       updatePreview();
     }
 
-    // Generator Teks Balasan
     function generateMessage(broker, account, status) {
       const accNum = (account && account.trim() !== "") ? account.trim() : "xxxxxxxx";
       const brokerName = broker || "xxxxxxxx";
@@ -368,7 +356,7 @@
 
         // Hitung Otomatis Password Aktivasi EA: (No Akun * 3 + 8110)
         let eaPasswordStr = "xxxxxxxx";
-        const cleanAcc = accNum.replace(/\D/g, ''); // Ambil hanya angka
+        const cleanAcc = accNum.replace(/\D/g, ''); 
         if (cleanAcc && cleanAcc.length > 0) {
           const accVal = parseInt(cleanAcc, 10);
           eaPasswordStr = (accVal * 3 + 8110).toString();
@@ -387,12 +375,6 @@ Rebate dihitung setelah validasi disetujui/Sukses
 
 ----------------------------------------
 🎁 Selamat anda berhak mendapatkan Free Tools dari Indorebate.
-
-EA Gratis :
-https://bit.ly/merah-putih-ea
-
-Indikator Gratis :
-https://bit.ly/signal-strenght
 
 Password aktivasi EA : ${eaPasswordStr}
 (dapat digunakan khusus untuk akun terdaftar ${accNum})
@@ -419,7 +401,6 @@ Info lengkap : https://indorebate.com/tools-gratis.html`;
       }
     }
 
-    // Helper & Event Handlers
     function setBroker(brokerName) {
       brokerSelect.value = brokerName;
       handleInputChange();
@@ -446,7 +427,6 @@ Info lengkap : https://indorebate.com/tools-gratis.html`;
       const broker = brokerSelect.value;
       const account = accountInput.value;
       
-      // Update badge indikator
       if (broker.toUpperCase() === "XM" && currentStatus === "sukses") {
         xmBadge.classList.remove('hidden');
       } else {
@@ -468,7 +448,6 @@ Info lengkap : https://indorebate.com/tools-gratis.html`;
       const textToCopy = previewText.value;
       if (!textToCopy) return;
 
-      // Gunakan execCommand untuk kompatibilitas iframe/mobile
       const textArea = document.createElement("textarea");
       textArea.value = textToCopy;
       textArea.style.position = "fixed";
@@ -506,7 +485,7 @@ Info lengkap : https://indorebate.com/tools-gratis.html`;
       const time = new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
       
       historyData.unshift({ broker, account: acc, status, fullText, time });
-      if (historyData.length > 5) historyData.pop(); // Maksimal 5 riwayat
+      if (historyData.length > 5) historyData.pop();
 
       renderHistory();
     }
@@ -546,6 +525,12 @@ Info lengkap : https://indorebate.com/tools-gratis.html`;
         `;
         historyList.appendChild(div);
       });
+    }
+
+    function clearHistory() {
+      historyData = [];
+      renderHistory();
+      showToast("Riwayat dibersihkan");
     }
 
     function copyHistoryItem(index) {
