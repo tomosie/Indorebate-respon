@@ -97,6 +97,9 @@
           <span id="tickmill-badge" class="hidden text-[10px] bg-blue-500/20 text-blue-400 font-medium px-2 py-0.5 rounded border border-blue-500/30">
             📅 Mingguan (Senin)
           </span>
+          <span id="tmgm-badge" class="hidden text-[10px] bg-purple-500/20 text-purple-400 font-medium px-2 py-0.5 rounded border border-purple-500/30">
+            💼 Wallet Penampungan
+          </span>
           <span id="link-badge" class="hidden text-[10px] bg-rose-500/20 text-rose-400 font-medium px-2 py-0.5 rounded border border-rose-500/30">
             🔗 Link Pindah IB Aktif
           </span>
@@ -119,7 +122,6 @@
           </div>
         </div>
 
-        <!-- Tombol Cepat Pilihan Broker (Pills) -->
         <div class="flex flex-wrap gap-1.5 mt-2.5">
           <button type="button" onclick="setBroker('Headway')" class="broker-pill px-2.5 py-1 text-xs rounded-lg bg-slate-700/60 hover:bg-slate-700 text-slate-300 border border-slate-600/40 transition active:scale-95">Headway</button>
           <button type="button" onclick="setBroker('Exness')" class="broker-pill px-2.5 py-1 text-xs rounded-lg bg-slate-700/60 hover:bg-slate-700 text-slate-300 border border-slate-600/40 transition active:scale-95">Exness</button>
@@ -128,7 +130,7 @@
           <button type="button" onclick="setBroker('Justmarkets')" class="broker-pill px-2.5 py-1 text-xs rounded-lg bg-slate-700/60 hover:bg-slate-700 text-slate-300 border border-slate-600/40 transition active:scale-95">Justmarkets</button>
           <button type="button" onclick="setBroker('Roboforex')" class="broker-pill px-2.5 py-1 text-xs rounded-lg bg-slate-700/60 hover:bg-slate-700 text-slate-300 border border-slate-600/40 transition active:scale-95">Roboforex</button>
           <button type="button" onclick="setBroker('XM')" class="broker-pill px-2.5 py-1 text-xs rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 transition active:scale-95 font-semibold">XM ★</button>
-          <button type="button" onclick="setBroker('TMGM')" class="broker-pill px-2.5 py-1 text-xs rounded-lg bg-slate-700/60 hover:bg-slate-700 text-slate-300 border border-slate-600/40 transition active:scale-95">TMGM</button>
+          <button type="button" onclick="setBroker('TMGM')" class="broker-pill px-2.5 py-1 text-xs rounded-lg bg-purple-500/20 hover:bg-purple-500/30 text-purple-300 border border-purple-500/40 transition active:scale-95 font-semibold">TMGM 💼</button>
         </div>
       </div>
 
@@ -175,7 +177,7 @@
       <div class="relative group">
         <textarea 
           id="preview-text" 
-          rows="16" 
+          rows="18" 
           readonly 
           class="w-full bg-slate-950/70 border border-slate-700/70 text-slate-200 rounded-xl p-3.5 text-xs sm:text-sm font-mono leading-relaxed resize-none focus:outline-none cursor-text select-all"
         ></textarea>
@@ -267,7 +269,7 @@
       </div>
       <div class="text-xs text-slate-300 space-y-2.5 leading-relaxed">
         <p>1. <strong>Status Validasi:</strong> Pilih <span class="text-emerald-400 font-semibold">Sukses</span> atau <span class="text-rose-400 font-semibold">Gagal</span>.</p>
-        <p>2. <strong>Mode Sukses:</strong> Broker <strong>XM</strong> khusus ke <em>myWallet</em>, sedangkan <strong>Tickmill</strong> dibayarkan <em>seminggu sekali setiap Senin</em>.</p>
+        <p>2. <strong>Mode Sukses:</strong> Broker <strong>TMGM</strong> memiliki format wallet penampungan khusus, <strong>XM</strong> khusus ke <em>myWallet</em>, dan <strong>Tickmill</strong> dibayarkan <em>seminggu sekali setiap Senin</em>.</p>
         <p>3. <strong>Mode Gagal:</strong> Otomatis memuat teks petunjuk pindah IB lengkap beserta URL resmi sesuai broker yang dipilih.</p>
         <p>4. Tekan tombol <strong>Salin</strong> untuk langsung paste ke WhatsApp/Chat.</p>
       </div>
@@ -306,6 +308,7 @@
     const charCount = document.getElementById('char-count');
     const xmBadge = document.getElementById('xm-badge');
     const tickmillBadge = document.getElementById('tickmill-badge');
+    const tmgmBadge = document.getElementById('tmgm-badge');
     const linkBadge = document.getElementById('link-badge');
     const btnClearInput = document.getElementById('btn-clear-input');
     const btnCopy = document.getElementById('btn-copy');
@@ -346,19 +349,13 @@
     }
 
     function generateMessage(broker, account, status) {
-      const accNum = (account && account.trim() !== "") ? account.trim() : "xxxxxxxx";
-      const brokerName = broker || "xxxxxxxx";
+      const accNum = (account && account.trim() !== "") ? account.trim() : "xxxxxx";
+      const brokerName = broker || "xxxxxx";
       
       if (status === 'sukses') {
         const isXM = (brokerName.toUpperCase() === "XM");
         const isTickmill = (brokerName.toUpperCase() === "TICKMILL");
-        
-        let paymentText = "tiap 24 jam setelah penutupan order langsung ke akun trading secara otomatis.";
-        if (isXM) {
-          paymentText = "tiap 24 jam setelah penutupan order langsung ke myWallet secara otomatis.";
-        } else if (isTickmill) {
-          paymentText = "seminggu sekali setiap hari senin ke akun trading secara otomatis.";
-        }
+        const isTMGM = (brokerName.toUpperCase() === "TMGM");
 
         // Hitung Otomatis Password Aktivasi EA: (No Akun * 3 + 8110)
         let eaPasswordStr = "xxxxxxxx";
@@ -366,6 +363,40 @@
         if (cleanAcc && cleanAcc.length > 0) {
           const accVal = parseInt(cleanAcc, 10);
           eaPasswordStr = (accVal * 3 + 8110).toString();
+        }
+
+        // Format khusus untuk TMGM Validasi Sukses
+        if (isTMGM) {
+          return `Validasi Rebate Sukses
+
+No akun trading : ${accNum}
+Broker : ${brokerName}
+
+No akun ${accNum} akan berubah menjadi wallet penampungan rebate anda. Rebate dibayarkan tiap 24 jam setelah penutupan order secara otomatis
+
+Penting!
+Silakan membuat akun trading tambahan untuk keperluan trading.
+Kedepan jika membuat akun trading baru lagi (dengan email yang sama) otomatis sudah aktif rebate nya
+
+Anda bisa melakukan validasi di web indorebate setiap anda membuat akun trading baru jika anda tidak yakin sudah aktif rebate nya
+
+Rebate dihitung setelah validasi disetujui/Sukses
+
+----------------------------------------
+🎁 Selamat anda berhak mendapatkan Free Tools dari Indorebate.
+
+Password aktivasi EA : ${eaPasswordStr}
+(dapat digunakan khusus untuk akun terdaftar ${accNum})
+
+Info EA dan Indikator gratis disini:
+https://indorebate.com/tools-gratis.html`;
+        }
+
+        let paymentText = "tiap 24 jam setelah penutupan order langsung ke akun trading secara otomatis.";
+        if (isXM) {
+          paymentText = "tiap 24 jam setelah penutupan order langsung ke myWallet secara otomatis.";
+        } else if (isTickmill) {
+          paymentText = "seminggu sekali setiap hari senin ke akun trading secara otomatis.";
         }
 
         return `Validasi Rebate Sukses
@@ -437,17 +468,25 @@ Info lengkap : https://indorebate.com/tools-gratis.html`;
         if (broker.toUpperCase() === "XM") {
           xmBadge.classList.remove('hidden');
           tickmillBadge.classList.add('hidden');
+          tmgmBadge.classList.add('hidden');
         } else if (broker.toUpperCase() === "TICKMILL") {
           tickmillBadge.classList.remove('hidden');
           xmBadge.classList.add('hidden');
+          tmgmBadge.classList.add('hidden');
+        } else if (broker.toUpperCase() === "TMGM") {
+          tmgmBadge.classList.remove('hidden');
+          xmBadge.classList.add('hidden');
+          tickmillBadge.classList.add('hidden');
         } else {
           xmBadge.classList.add('hidden');
           tickmillBadge.classList.add('hidden');
+          tmgmBadge.classList.add('hidden');
         }
         linkBadge.classList.add('hidden');
       } else {
         xmBadge.classList.add('hidden');
         tickmillBadge.classList.add('hidden');
+        tmgmBadge.classList.add('hidden');
         linkBadge.classList.remove('hidden');
       }
 
