@@ -100,6 +100,9 @@
           <span id="tmgm-badge" class="hidden text-[10px] bg-purple-500/20 text-purple-400 font-medium px-2 py-0.5 rounded border border-purple-500/30">
             💼 Wallet Penampungan
           </span>
+          <span id="hfm-badge" class="hidden text-[10px] bg-red-500/20 text-red-400 font-medium px-2 py-0.5 rounded border border-red-500/30">
+            📜 Ada S&K Khusus
+          </span>
           <span id="link-badge" class="hidden text-[10px] bg-rose-500/20 text-rose-400 font-medium px-2 py-0.5 rounded border border-rose-500/30">
             🔗 Link Pindah IB Aktif
           </span>
@@ -125,7 +128,7 @@
         <div class="flex flex-wrap gap-1.5 mt-2.5">
           <button type="button" onclick="setBroker('Headway')" class="broker-pill px-2.5 py-1 text-xs rounded-lg bg-slate-700/60 hover:bg-slate-700 text-slate-300 border border-slate-600/40 transition active:scale-95">Headway</button>
           <button type="button" onclick="setBroker('Exness')" class="broker-pill px-2.5 py-1 text-xs rounded-lg bg-slate-700/60 hover:bg-slate-700 text-slate-300 border border-slate-600/40 transition active:scale-95">Exness</button>
-          <button type="button" onclick="setBroker('HFM')" class="broker-pill px-2.5 py-1 text-xs rounded-lg bg-slate-700/60 hover:bg-slate-700 text-slate-300 border border-slate-600/40 transition active:scale-95">HFM</button>
+          <button type="button" onclick="setBroker('HFM')" class="broker-pill px-2.5 py-1 text-xs rounded-lg bg-red-500/20 hover:bg-red-500/30 text-red-300 border border-red-500/40 transition active:scale-95 font-semibold">HFM 📜</button>
           <button type="button" onclick="setBroker('Tickmill')" class="broker-pill px-2.5 py-1 text-xs rounded-lg bg-blue-500/20 hover:bg-blue-500/30 text-blue-300 border border-blue-500/40 transition active:scale-95 font-semibold">Tickmill 📅</button>
           <button type="button" onclick="setBroker('Justmarkets')" class="broker-pill px-2.5 py-1 text-xs rounded-lg bg-slate-700/60 hover:bg-slate-700 text-slate-300 border border-slate-600/40 transition active:scale-95">Justmarkets</button>
           <button type="button" onclick="setBroker('Roboforex')" class="broker-pill px-2.5 py-1 text-xs rounded-lg bg-slate-700/60 hover:bg-slate-700 text-slate-300 border border-slate-600/40 transition active:scale-95">Roboforex</button>
@@ -269,7 +272,7 @@
       </div>
       <div class="text-xs text-slate-300 space-y-2.5 leading-relaxed">
         <p>1. <strong>Status Validasi:</strong> Pilih <span class="text-emerald-400 font-semibold">Sukses</span> atau <span class="text-rose-400 font-semibold">Gagal</span>.</p>
-        <p>2. <strong>Mode Sukses:</strong> Broker <strong>TMGM</strong> memiliki format wallet penampungan khusus, <strong>XM</strong> khusus ke <em>myWallet</em>, dan <strong>Tickmill</strong> dibayarkan <em>seminggu sekali setiap Senin</em>.</p>
+        <p>2. <strong>Mode Sukses:</strong> Broker <strong>TMGM</strong> memiliki format khusus, <strong>HFM</strong> memiliki link Syarat & Ketentuan khusus, <strong>XM</strong> ke <em>myWallet</em>, dan <strong>Tickmill</strong> dibayarkan <em>setiap Senin</em>.</p>
         <p>3. <strong>Mode Gagal:</strong> Otomatis memuat teks petunjuk pindah IB lengkap beserta URL resmi sesuai broker yang dipilih.</p>
         <p>4. Tekan tombol <strong>Salin</strong> untuk langsung paste ke WhatsApp/Chat.</p>
       </div>
@@ -309,6 +312,7 @@
     const xmBadge = document.getElementById('xm-badge');
     const tickmillBadge = document.getElementById('tickmill-badge');
     const tmgmBadge = document.getElementById('tmgm-badge');
+    const hfmBadge = document.getElementById('hfm-badge');
     const linkBadge = document.getElementById('link-badge');
     const btnClearInput = document.getElementById('btn-clear-input');
     const btnCopy = document.getElementById('btn-copy');
@@ -356,6 +360,7 @@
         const isXM = (brokerName.toUpperCase() === "XM");
         const isTickmill = (brokerName.toUpperCase() === "TICKMILL");
         const isTMGM = (brokerName.toUpperCase() === "TMGM");
+        const isHFM = (brokerName.toUpperCase() === "HFM");
 
         // Format khusus untuk TMGM Validasi Sukses
         if (isTMGM) {
@@ -398,6 +403,12 @@ Jika anda sudah membuat akun untuk trading silakan hubungi wa admin indorebate u
           paymentText = "seminggu sekali setiap hari senin ke akun trading secara otomatis.";
         }
 
+        // Catatan khusus Syarat & Ketentuan HFM
+        let hfmTermsNotice = "";
+        if (isHFM) {
+          hfmTermsNotice = `\n\n📌 Catatan Penting:\nMohon membaca Syarat & Ketentuan Rebate HFM melalui tautan berikut:\nhttps://indorebate.com/rebate-hfm.html#syarat-ketentuan`;
+        }
+
         return `Validasi Rebate Sukses
 
 No akun trading : ${accNum}
@@ -407,7 +418,7 @@ Rebate dibayarkan ${paymentText}
 
 Harap lakukan validasi di web indorebate setiap anda membuat akun trading baru.
 
-Perhitungan rebate dimulai sejak akun disetujui / sukses aktivasi rebate. Untuk trade sebelumnya tidak diperhitungkan
+Perhitungan rebate dimulai sejak akun disetujui / sukses aktivasi rebate. Untuk trade sebelumnya tidak diperhitungkan${hfmTermsNotice}
 
 ----------------------------------------
 🎁 Selamat anda berhak mendapatkan Free Tools dari Indorebate.
@@ -463,29 +474,24 @@ Info lengkap : https://indorebate.com/tools-gratis.html`;
       const broker = brokerSelect.value;
       const account = accountInput.value;
       
+      // Hide all badges first
+      xmBadge.classList.add('hidden');
+      tickmillBadge.classList.add('hidden');
+      tmgmBadge.classList.add('hidden');
+      hfmBadge.classList.add('hidden');
+      linkBadge.classList.add('hidden');
+
       if (currentStatus === "sukses") {
         if (broker.toUpperCase() === "XM") {
           xmBadge.classList.remove('hidden');
-          tickmillBadge.classList.add('hidden');
-          tmgmBadge.classList.add('hidden');
         } else if (broker.toUpperCase() === "TICKMILL") {
           tickmillBadge.classList.remove('hidden');
-          xmBadge.classList.add('hidden');
-          tmgmBadge.classList.add('hidden');
         } else if (broker.toUpperCase() === "TMGM") {
           tmgmBadge.classList.remove('hidden');
-          xmBadge.classList.add('hidden');
-          tickmillBadge.classList.add('hidden');
-        } else {
-          xmBadge.classList.add('hidden');
-          tickmillBadge.classList.add('hidden');
-          tmgmBadge.classList.add('hidden');
+        } else if (broker.toUpperCase() === "HFM") {
+          hfmBadge.classList.remove('hidden');
         }
-        linkBadge.classList.add('hidden');
       } else {
-        xmBadge.classList.add('hidden');
-        tickmillBadge.classList.add('hidden');
-        tmgmBadge.classList.add('hidden');
         linkBadge.classList.remove('hidden');
       }
 
