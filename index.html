@@ -396,11 +396,12 @@ Jika anda sudah membuat akun untuk trading silakan hubungi wa admin indorebate u
           eaPasswordStr = (accVal * 3 + 8110).toString();
         }
 
-        let paymentText = "tiap 24 jam setelah penutupan order langsung ke akun trading secara otomatis.";
+        // Teks jadwal pembayaran (Highlight tebal di WhatsApp menggunakan *...*)
+        let paymentText = "*Rebate dibayarkan H+1 setelah penutupan order langsung ke dalam Saldo Akun Trading secara otomatis.*";
         if (isXM) {
-          paymentText = "tiap 24 jam setelah penutupan order langsung ke myWallet secara otomatis.";
+          paymentText = "Rebate dibayarkan tiap 24 jam setelah penutupan order langsung ke myWallet secara otomatis.";
         } else if (isTickmill) {
-          paymentText = "seminggu sekali setiap hari senin ke akun trading secara otomatis.";
+          paymentText = "*Rebate dibayarkan seminggu sekali setiap hari senin ke dalam Saldo Akun Trading secara otomatis.*";
         }
 
         // Catatan khusus Syarat & Ketentuan HFM
@@ -414,7 +415,7 @@ Jika anda sudah membuat akun untuk trading silakan hubungi wa admin indorebate u
 No akun trading : ${accNum}
 Broker : ${brokerName}
 
-Rebate dibayarkan ${paymentText}
+${paymentText}
 
 Harap lakukan validasi di web indorebate setiap anda membuat akun trading baru.
 
