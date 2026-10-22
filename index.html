@@ -274,7 +274,7 @@
         <p>1. <strong>Status Validasi:</strong> Pilih <span class="text-emerald-400 font-semibold">Sukses</span> atau <span class="text-rose-400 font-semibold">Gagal</span>.</p>
         <p>2. <strong>Mode Sukses:</strong> Broker <strong>TMGM</strong> memiliki format khusus, <strong>HFM</strong> memiliki link Syarat & Ketentuan khusus, <strong>XM</strong> ke <em>myWallet</em>, dan <strong>Tickmill</strong> dibayarkan <em>setiap Senin</em>.</p>
         <p>3. <strong>Mode Gagal:</strong> Otomatis memuat teks petunjuk pindah IB lengkap beserta URL resmi sesuai broker yang dipilih.</p>
-        <p>4. Tekan tombol <strong>Salin</strong> untuk langsung paste ke WhatsApp/Chat.</p>
+        <p>4. Tekan tombol <strong>Salin</strong> untuk langsung paste ke Email/WhatsApp/Chat.</p>
       </div>
       <button onclick="toggleInfoModal()" class="w-full bg-slate-700 hover:bg-slate-600 text-white font-semibold py-2.5 rounded-xl text-xs transition">
         Tutup
@@ -396,12 +396,12 @@ Jika anda sudah membuat akun untuk trading silakan hubungi wa admin indorebate u
           eaPasswordStr = (accVal * 3 + 8110).toString();
         }
 
-        // Teks jadwal pembayaran (Highlight tebal di WhatsApp menggunakan *...*)
-        let paymentText = "*Rebate dibayarkan H+1 setelah penutupan order langsung ke dalam Saldo Akun Trading secara otomatis.*";
+        // Teks jadwal pembayaran (Polos tanpa asteris)
+        let paymentText = "Rebate dibayarkan H+1 setelah penutupan order langsung ke dalam Saldo Akun Trading secara otomatis.";
         if (isXM) {
           paymentText = "Rebate dibayarkan tiap 24 jam setelah penutupan order langsung ke myWallet secara otomatis.";
         } else if (isTickmill) {
-          paymentText = "*Rebate dibayarkan seminggu sekali setiap hari senin ke dalam Saldo Akun Trading secara otomatis.*";
+          paymentText = "Rebate dibayarkan seminggu sekali setiap hari senin ke dalam Saldo Akun Trading secara otomatis.";
         }
 
         // Catatan khusus Syarat & Ketentuan HFM
