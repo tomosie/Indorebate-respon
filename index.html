@@ -56,6 +56,32 @@
 
     <section class="bg-slate-800/90 border border-slate-700/80 rounded-2xl p-5 shadow-xl space-y-4">
       
+      <!-- Pilihan Bahasa / Language -->
+      <div>
+        <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">
+          Pilih Bahasa / Language
+        </label>
+        <div class="grid grid-cols-2 p-1 bg-slate-900 rounded-xl border border-slate-700">
+          <button 
+            type="button" 
+            id="lang-id" 
+            onclick="setLanguage('id')" 
+            class="flex items-center justify-center gap-1.5 py-2 rounded-lg text-xs font-bold transition duration-200 bg-emerald-500 text-slate-950 shadow-md"
+          >
+            🇮🇩 Bahasa Indonesia
+          </button>
+          
+          <button 
+            type="button" 
+            id="lang-en" 
+            onclick="setLanguage('en')" 
+            class="flex items-center justify-center gap-1.5 py-2 rounded-lg text-xs font-bold transition duration-200 text-slate-400 hover:text-white"
+          >
+            🇬🇧 English
+          </button>
+        </div>
+      </div>
+
       <!-- Pilihan Status Validasi (Tab Toggle) -->
       <div>
         <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">
@@ -297,6 +323,7 @@
 
     // State Aplikasi
     let currentStatus = 'sukses'; 
+    let currentLang = 'id';
     let historyData = [];
 
     // DOM Elements
@@ -323,6 +350,21 @@
     const emptyHistory = document.getElementById('empty-history');
     const btnClearHistory = document.getElementById('btn-clear-history');
     const infoModal = document.getElementById('info-modal');
+
+    function setLanguage(lang) {
+      currentLang = lang;
+      const langIdBtn = document.getElementById('lang-id');
+      const langEnBtn = document.getElementById('lang-en');
+
+      if (lang === 'id') {
+        langIdBtn.className = "flex items-center justify-center gap-1.5 py-2 rounded-lg text-xs font-bold transition duration-200 bg-emerald-500 text-slate-950 shadow-md";
+        langEnBtn.className = "flex items-center justify-center gap-1.5 py-2 rounded-lg text-xs font-bold transition duration-200 text-slate-400 hover:text-white";
+      } else {
+        langEnBtn.className = "flex items-center justify-center gap-1.5 py-2 rounded-lg text-xs font-bold transition duration-200 bg-emerald-500 text-slate-950 shadow-md";
+        langIdBtn.className = "flex items-center justify-center gap-1.5 py-2 rounded-lg text-xs font-bold transition duration-200 text-slate-400 hover:text-white";
+      }
+      updatePreview();
+    }
 
     function setStatus(status) {
       currentStatus = status;
@@ -362,7 +404,74 @@
         const isTMGM = (brokerName.toUpperCase() === "TMGM");
         const isHFM = (brokerName.toUpperCase() === "HFM");
 
-        // Format khusus untuk TMGM Validasi Sukses
+        // Format Bahasa Inggris (EN)
+        if (currentLang === 'en') {
+          if (isTMGM) {
+            return `Rebate Validation Successful
+
+Trading Account No : ${accNum}
+Broker : TMGM
+
+Account no ${accNum} will serve as your rebate receiving wallet. Rebates are paid automatically on an H+1 basis after order closure into this Wallet Balance.
+
+Important!
+Please create an additional trading account for trading purposes.
+In the future, any new trading account created (with the same email) will automatically have rebate active.
+
+You can perform validation on the Indorebate website whenever you create a new trading account if you are unsure whether rebate is active.
+
+Rebate calculation starts from the time the account is approved / rebate activation is successful. Previous trades will not be calculated.
+
+----------------------------------------
+🎁 Congratulations, you are eligible for Free Tools from Indorebate.
+
+Free EA and Indicator info here:
+https://indorebate.com/tools-gratis.html
+
+If you have created an account for trading, please contact Indorebate admin WhatsApp to obtain the free EA & Indicator activation password.`;
+          }
+
+          let eaPasswordStr = "xxxxxxxx";
+          const cleanAcc = accNum.replace(/\D/g, ''); 
+          if (cleanAcc && cleanAcc.length > 0) {
+            const accVal = parseInt(cleanAcc, 10);
+            eaPasswordStr = (accVal * 3 + 8110).toString();
+          }
+
+          let paymentText = "Rebates are paid automatically on an H+1 basis after order closure directly into your Trading Account Balance.";
+          if (isXM) {
+            paymentText = "Rebates are paid automatically every 24 hours after order closure directly to myWallet.";
+          } else if (isTickmill) {
+            paymentText = "Rebates are paid automatically once a week every Monday into your Trading Account Balance.";
+          }
+
+          let hfmTermsNotice = "";
+          if (isHFM) {
+            hfmTermsNotice = `\n\n📌 Important Note:\nPlease read the HFM Rebate Terms & Conditions at the following link:\nhttps://indorebate.com/rebate-hfm.html#syarat-ketentuan`;
+          }
+
+          return `Rebate Validation Successful
+
+Trading Account No : ${accNum}
+Broker : ${brokerName}
+
+${paymentText}
+
+Please perform validation on the Indorebate website whenever you create a new trading account.
+
+Rebate calculation starts from the time the account is approved / rebate activation is successful. Previous trades will not be calculated.${hfmTermsNotice}
+
+----------------------------------------
+🎁 Congratulations, you are eligible for Free Tools from Indorebate.
+
+EA Activation Password : ${eaPasswordStr}
+(specifically for registered account ${accNum})
+
+Free EA and Indicator info here:
+https://indorebate.com/tools-gratis.html`;
+        }
+
+        // Format Bahasa Indonesia (ID)
         if (isTMGM) {
           return `Validasi Rebate Sukses
 
@@ -431,6 +540,23 @@ Info EA dan Indikator gratis disini:
 https://indorebate.com/tools-gratis.html`;
       } else {
         const linkIB = IB_LINKS[brokerName] || `https://indorebate.com/pindah-ib-${brokerName.toLowerCase()}.html`;
+
+        if (currentLang === 'en') {
+          return `Validation Failed
+
+Trading Account No : ${accNum}
+Broker : ${brokerName}
+
+Your account number cannot be activated for rebate because it is not under our partner network (IB).
+
+Please proceed with the change of IB / network process.
+
+For broker ${brokerName}, follow the instructions at ${linkIB}
+
+----------------------------------------
+🎁 Free EA & Indicators exclusively for Indorebate members
+Full info : https://indorebate.com/tools-gratis.html`;
+        }
 
         return `Validasi Gagal
 
