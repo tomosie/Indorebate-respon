@@ -309,7 +309,7 @@
   </div>
 
   <script>
-    // Database URL Pindah IB untuk masing-masing broker
+    // Database URL Pindah IB untuk masing-masing broker (Bahasa Indonesia)
     const IB_LINKS = {
       "Headway": "https://indorebate.com/pindah-ib-headway.html",
       "Exness": "https://indorebate.com/pindah-ib-exness.html",
@@ -319,6 +319,18 @@
       "Roboforex": "https://indorebate.com/pindah-ib-roboforex.html",
       "XM": "https://indorebate.com/pindah-ib-xm.html",
       "TMGM": "https://indorebate.com/pindah-ib-tmgm.html"
+    };
+
+    // Database URL Switch Partner untuk masing-masing broker (English)
+    const IB_LINKS_EN = {
+      "Headway": "https://indorebate.com/en/switch-partner-headway.html",
+      "Exness": "https://indorebate.com/en/switch-partner-exness.html",
+      "HFM": "https://indorebate.com/en/switch-partner-hfm.html",
+      "Tickmill": "https://indorebate.com/en/switch-partner-tickmill.html",
+      "Justmarkets": "https://indorebate.com/en/switch-partner-justmarkets.html",
+      "Roboforex": "https://indorebate.com/en/switch-partner-roboforex.html",
+      "XM": "https://indorebate.com/en/switch-partner-xm.html",
+      "TMGM": "https://indorebate.com/en/switch-partner-tmgm.html"
     };
 
     // State Aplikasi
@@ -426,7 +438,7 @@ Rebate calculation starts from the time the account is approved / rebate activat
 🎁 Congratulations, you are eligible for Free Tools from Indorebate.
 
 Free EA and Indicator info here:
-https://indorebate.com/tools-gratis.html
+https://indorebate.com/en/free-tools.html
 
 If you have created an account for trading, please contact Indorebate admin WhatsApp to obtain the free EA & Indicator activation password.`;
           }
@@ -468,7 +480,7 @@ EA Activation Password : ${eaPasswordStr}
 (specifically for registered account ${accNum})
 
 Free EA and Indicator info here:
-https://indorebate.com/tools-gratis.html`;
+https://indorebate.com/en/free-tools.html`;
         }
 
         // Format Bahasa Indonesia (ID)
@@ -539,9 +551,9 @@ Password aktivasi EA : ${eaPasswordStr}
 Info EA dan Indikator gratis disini:
 https://indorebate.com/tools-gratis.html`;
       } else {
-        const linkIB = IB_LINKS[brokerName] || `https://indorebate.com/pindah-ib-${brokerName.toLowerCase()}.html`;
-
         if (currentLang === 'en') {
+          const linkIBEn = IB_LINKS_EN[brokerName] || `https://indorebate.com/en/switch-partner-${brokerName.toLowerCase()}.html`;
+
           return `Validation Failed
 
 Trading Account No : ${accNum}
@@ -551,12 +563,14 @@ Your account number cannot be activated for rebate because it is not under our p
 
 Please proceed with the change of IB / network process.
 
-For broker ${brokerName}, follow the instructions at ${linkIB}
+For broker ${brokerName}, follow the instructions at ${linkIBEn}
 
 ----------------------------------------
 🎁 Free EA & Indicators exclusively for Indorebate members
-Full info : https://indorebate.com/tools-gratis.html`;
+Full info : https://indorebate.com/en/free-tools.html`;
         }
+
+        const linkIB = IB_LINKS[brokerName] || `https://indorebate.com/pindah-ib-${brokerName.toLowerCase()}.html`;
 
         return `Validasi Gagal
 
